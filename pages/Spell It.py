@@ -1,5 +1,4 @@
-"""Spell It page function for the assign gesture to the missing letter of
-a word"""
+"""Spell It page: sign the letter missing from a word."""
 
 import streamlit as st
 
@@ -49,6 +48,16 @@ text_to_image_spellit(st.session_state.word_with_removed_letter)
 
 
 def compare_predict(true_missing_letter, uploaded_image):
+    """Predict the letter in an image and check it against the missing letter.
+
+    Shows the image with its hand landmarks, then a success or error message
+    and the model's confidence in its prediction.
+
+    Args:
+        true_missing_letter: The upper-case letter removed from the word.
+        uploaded_image: The Streamlit ``UploadedFile`` with the user's sign,
+            or None.
+    """
     image, predicted_letter, prediction = get_image_and_prediction(uploaded_image)
     if image is not None:
 

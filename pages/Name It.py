@@ -1,3 +1,5 @@
+"""Name It page: guess which letter a random ASL sign image shows."""
+
 import numpy as np
 import streamlit as st
 
@@ -25,6 +27,11 @@ LETTERS = list("ABCDEFGHIKLMNOPQRSTUVWXY")
 
 
 def random_image():
+    """Pick a random letter and its reference sign image.
+
+    Returns:
+        tuple[str, str]: The letter and the path to its sign image.
+    """
     r = np.random.choice(len(LETTERS))
     letter = LETTERS[r]
     image_path = f".images/ASL Letter Reference/{letter}.jpg"

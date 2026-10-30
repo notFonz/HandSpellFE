@@ -1,3 +1,5 @@
+"""Sign It page: sign a given letter and check it with the model."""
+
 import numpy as np
 import streamlit as st
 
@@ -21,6 +23,11 @@ LETTERS = tuple("ABCDEFGHIKLMNOPQRSTUVWXY")
 
 
 def take_random_letter(letters: tuple = LETTERS):
+    """Store a random letter to sign in ``st.session_state.signit_letter``.
+
+    Args:
+        letters: The letters to choose from.
+    """
     random_letter = np.random.choice(letters, 1)
     st.session_state.signit_letter = random_letter[0]
 
@@ -37,6 +44,16 @@ st.subheader(f"Try making the Sign of this letter: **{st.session_state.signit_le
 
 
 def compare_predict(correct_letter, uploaded_image):
+    """Predict the letter in an image and compare it to the expected letter.
+
+    Shows the image with its hand landmarks, then a success or error message
+    with the model's confidence in its prediction and, when wrong, in the
+    expected letter.
+
+    Args:
+        correct_letter: The letter the user was asked to sign.
+        uploaded_image: The Streamlit ``UploadedFile`` with the user's sign.
+    """
     image, predicted_letter, prediction = get_image_and_prediction(uploaded_image)
     if image is not None:
 
