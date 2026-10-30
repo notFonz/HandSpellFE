@@ -8,11 +8,7 @@ from style import load_style
 
 load_style()
 
-st.set_page_config(
-    page_title="HandSpell Sign It", page_icon=".images/le-wagon-logo.png", layout="wide"
-)
-
-st.logo(".images/le-wagon-logo.png", size="large")
+st.set_page_config(page_title="HandSpell Sign It")
 
 API_BASE_URL = st.secrets["API_URL"]
 

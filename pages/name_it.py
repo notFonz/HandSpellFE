@@ -12,11 +12,8 @@ API_BASE_URL = st.secrets["API_URL"]
 API_SIGN_ENDPOINT = API_BASE_URL + "sign/"
 API_PREDICT_ENDPOINT = API_BASE_URL + "predict"
 
-st.set_page_config(
-    page_title="HandSpell Name It", page_icon=".images/le-wagon-logo.png", layout="wide"
-)
+st.set_page_config(page_title="HandSpell Name It")
 
-st.logo(".images/le-wagon-logo.png", size="large")
 
 st.markdown(
     "# <span class='accent'>Name</span>It",
