@@ -1,6 +1,6 @@
-import os
-import requests
-import numpy as np
+"""Spell It page function for the assign gesture to the missing letter of
+a word"""
+
 import streamlit as st
 
 from utils import (
@@ -32,18 +32,6 @@ st.markdown(
 )
 st.subheader("Complete the word with an image !")
 
-# st.set_page_config(page_title="HandSpell Spell It", layout="centered")
-# st.title("Spell It")
-# st.write("Complete the word with an image !")
-
-
-# random_word = take_random_word(list_words)
-
-# word_with_removed_letter, removed_letter = take_random_letter(random_word)
-
-# st.session_state.random_word = take_random_word(list_words)
-
-# st.session_state.word_with_removed_letter, st.session_state.removed_letter = take_random_letter(st.session_state.random_word)
 
 if "idx" not in st.session_state:
 
@@ -53,11 +41,9 @@ if "random_word" not in st.session_state:
 
     st.session_state.random_word = take_random_word(list_words)
 
-    st.session_state.word_with_removed_letter, st.session_state.removed_letter = (
-        take_random_letter(st.session_state.random_word)
+    st.session_state.word_with_removed_letter, st.session_state.removed_letter = take_random_letter(
+        st.session_state.random_word
     )
-
-# container = text_to_image_spellit(st.session_state.word_with_removed_letter)
 
 text_to_image_spellit(st.session_state.word_with_removed_letter)
 
@@ -76,14 +62,16 @@ def compare_predict(true_missing_letter, uploaded_image):
             prediction_confidence = prediction["confidence"]
             if prediction["letter"] == true_missing_letter:
                 st.success(
-                    f"That's right, word was missing a **{true_missing_letter}**, good fingerspelling !"
+                    "That's right, word was missing a "
+                    + f"**{true_missing_letter}**, good fingerspelling !"
                 )
             else:
                 st.error(
-                    f"You signed **{predicted_letter}**, it's not quite right. Try again !"
+                    f"You signed **{predicted_letter}**" + ", it's not quite right. Try again !"
                 )
             st.write(
-                f"Model is {prediction_confidence*100:.0f}% confident you signed **{predicted_letter}**."
+                f"Model is {prediction_confidence*100:.0f}% "
+                f"confident you signed **{predicted_letter}**."
             )
 
 
@@ -94,9 +82,7 @@ with left:
 
     source = st.radio("Input", ["Upload image", "Take a photo"], horizontal=True)
     uploaded = (
-        st.file_uploader(
-            "Choose an image", type=["jpg", "jpeg", "png"], key="single_upload"
-        )
+        st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"], key="single_upload")
         if source == "Upload image"
         else st.camera_input("Take a hand sign photo")
     )
@@ -114,8 +100,8 @@ if st.button("Refresh"):
 
     st.session_state.random_word = take_random_word(list_words)
 
-    st.session_state.word_with_removed_letter, st.session_state.removed_letter = (
-        take_random_letter(st.session_state.random_word)
+    st.session_state.word_with_removed_letter, st.session_state.removed_letter = take_random_letter(
+        st.session_state.random_word
     )
 
     st.rerun()

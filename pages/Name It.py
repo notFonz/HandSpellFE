@@ -1,5 +1,3 @@
-import os
-import requests
 import numpy as np
 import streamlit as st
 
@@ -38,9 +36,7 @@ with left:
     st.subheader("Guess what sign this is!")
     if st.button("Get a new sign !", width=400):
 
-        st.session_state.nameit_true_letter, st.session_state.nameit_image_path = (
-            random_image()
-        )
+        st.session_state.nameit_true_letter, st.session_state.nameit_image_path = random_image()
         st.session_state.nameit_guess = ""  # clear the previous guess
 
     if "nameit_image_path" in st.session_state:
@@ -50,13 +46,11 @@ with right:
 
     st.subheader("Your guess:")
     if "nameit_image_path" in st.session_state:
-        letter = st.text_input("", max_chars=1, width=50, key="nameit_guess")
+        letter1 = st.text_input("", max_chars=1, width=50, key="nameit_guess")
 
-        if letter:
+        if letter1:
             true_letter = st.session_state.nameit_true_letter
-            if letter.lower() == true_letter.lower():
-                st.success(
-                    f"You guessed it right, the sign represents **{true_letter}** !"
-                )
+            if letter1.lower() == true_letter.lower():
+                st.success(f"You guessed it right, the sign represents **{true_letter}** !")
             else:
-                st.error(f"You guessed it wrong, try again !")
+                st.error("You guessed it wrong, try again !")

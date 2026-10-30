@@ -1,5 +1,3 @@
-import os
-import requests
 import numpy as np
 import streamlit as st
 
@@ -19,11 +17,11 @@ API_BASE_URL = st.secrets["API_URL"]
 API_SIGN_ENDPOINT = API_BASE_URL + "sign/"
 API_PREDICT_ENDPOINT = API_BASE_URL + "predict"
 
-LETTERS = list("ABCDEFGHIKLMNOPQRSTUVWXY")
+LETTERS = tuple("ABCDEFGHIKLMNOPQRSTUVWXY")
 
 
-def take_random_letter(LETTERS: list = LETTERS):
-    random_letter = np.random.choice(LETTERS, 1)
+def take_random_letter(letters: tuple = LETTERS):
+    random_letter = np.random.choice(letters, 1)
     st.session_state.signit_letter = random_letter[0]
 
 
@@ -35,9 +33,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.subheader(
-    "Try making the Sign of this letter: **{}**".format(st.session_state.signit_letter)
-)
+st.subheader(f"Try making the Sign of this letter: **{st.session_state.signit_letter}**")
 
 
 def compare_predict(correct_letter, uploaded_image):
@@ -52,26 +48,30 @@ def compare_predict(correct_letter, uploaded_image):
 
         if predicted_letter:
             prediction_confidence = prediction["confidence"]
-            correct_letter = str(correct_letter)
-            letter_idx = prediction["letters"].index(correct_letter)
+            correct_letter_str = str(correct_letter)
+            letter_idx = prediction["letters"].index(correct_letter_str)
             correct_letter_confidence = prediction["scores"][letter_idx]
 
-            if prediction["letter"] == correct_letter:
+            if prediction["letter"] == correct_letter_str:
                 st.success(
-                    f"That's right, you signed **{correct_letter}**, good fingerspelling !"
+                    f"That's right, you signed **{correct_letter_str}**, good fingerspelling !"
                 )
                 st.write(
-                    f"Model is {prediction_confidence*100:.0f}% confident you signed **{predicted_letter}**."
+                    f"Model is {prediction_confidence*100:.0f}% confident "
+                    f"you signed **{predicted_letter}**."
                 )
             else:
                 st.error(
-                    f"You signed **{predicted_letter}**, that's not a **{correct_letter}**... Try again !"
+                    f"You signed **{predicted_letter}**, that's not a "
+                    f"**{correct_letter_str}**... Try again !"
                 )
                 st.write(
-                    f"Model is {int(round(prediction_confidence*100,0))}% confident you signed **{predicted_letter}**"
+                    f"Model is {int(round(prediction_confidence*100,0))}% "
+                    f"confident you signed **{predicted_letter}**"
                 )
                 st.write(
-                    f"... and {int(round(correct_letter_confidence*100, 0))}% confident you signed **{correct_letter}**."
+                    f"... and {int(round(correct_letter_confidence*100, 0))}% "
+                    f"confident you signed **{correct_letter_str}**."
                 )
 
 
@@ -116,6 +116,6 @@ with left:
 with right:
     st.header("Translation results")
     if "signit_image_uploaded" in st.session_state:
-        correct_letter = st.session_state.signit_letter
-        uploaded_image = st.session_state.signit_image_uploaded
-        compare_predict(correct_letter, uploaded_image)
+        correct_letter1 = st.session_state.signit_letter
+        uploaded_image1 = st.session_state.signit_image_uploaded
+        compare_predict(correct_letter1, uploaded_image1)

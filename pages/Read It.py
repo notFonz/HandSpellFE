@@ -73,13 +73,13 @@ with right:
     st.header("Translation results")
     if "readit_image_uploaded" in st.session_state:
         uploaded_image = st.session_state.readit_image_uploaded
-        image, letter, prediction = get_image_and_prediction(uploaded_image)
+        image, letter1, prediction = get_image_and_prediction(uploaded_image)
 
         if image is not None:
             st.session_state.readit_image = image
 
             if prediction["confidence"] is not None:
-                st.session_state.readit_letter = letter
+                st.session_state.readit_letter = letter1
                 st.session_state.results = prediction
 
                 f = plot_landmarks(image, prediction["landmarks"])
@@ -89,11 +89,10 @@ with right:
 
     results = st.session_state.get("results", [])
 
-    # st.write(results)
     if not results:
         st.info("Choose your images and select Translate.")
     elif results:
-        letter = st.session_state.readit_letter
-        render_result(results, letter)
+        letter2 = st.session_state.readit_letter
+        render_result(results, letter2)
         with st.expander("All API responses"):
             st.json(results)

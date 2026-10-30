@@ -1,4 +1,3 @@
-import os
 import requests
 import numpy as np
 import streamlit as st
@@ -55,15 +54,6 @@ def get_uploaded_image(uploaded_file):
 
 
 def take_random_word(list_of_words: list):
-
-    # random_word = np.random.choice(list_of_words, 1)
-    # st.session_state.idx = 0
-
-    # random_word = list_of_words[st.session_state.idx]
-
-    # st.write(random_word)
-
-    # return random_word
 
     idx = st.session_state.idx
 
@@ -126,9 +116,7 @@ def get_image_and_prediction(uploaded_file):
         if response.status_code == 200:
             prediction = response.json()
             if prediction["confidence"] is None:
-                st.warning(
-                    "No hand/sign detected. Try a clear photo of the whole hand."
-                )
+                st.warning("No hand/sign detected. Try a clear photo of the whole hand.")
             else:
                 predicted_letter = prediction["letter"]
         else:
@@ -138,10 +126,9 @@ def get_image_and_prediction(uploaded_file):
 
 
 def plot_landmarks(image: Image, landmarks: list) -> plt.figure:
-    # Plot
+
     img = np.array(image.convert("RGB"))
     h, w = img.shape[:2]
-    # st.write(img.shape)
 
     f, ax = plt.subplots()
     ax.imshow(img)

@@ -1,3 +1,5 @@
+"""Style function to apply color accent to words"""
+
 import streamlit as st
 
 
