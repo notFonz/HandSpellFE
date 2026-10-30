@@ -1,7 +1,7 @@
 # HandSpell - Reading hands, one letter at a time
 
 [HandSpell FrontEnd Streamlit Website](
-  https://handspellfe.streamlit.app/).
+  https://handspell.streamlit.app/).
 Provides:
 - Learn It, input a letter to get its sign language gesture
 - Name It, get an image and guess what sign gesture it represents
