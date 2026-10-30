@@ -211,8 +211,9 @@ def plot_landmarks(image: Image, landmarks: list) -> plt.figure:
 
     Args:
         image: The PIL image the landmarks were detected on.
-        landmarks: Hand landmarks, each a dict with ``"x"`` and ``"y"``
-            coordinates normalised to the [0, 1] range.
+        landmarks: Hand landmarks, each a dict with ``"x"``, ``"y"`` and ``"z"``
+            coordinates. ``x`` and ``y`` are normalised to the [0, 1] range;
+            ``z`` (depth) is not used for plotting.
 
     Returns:
         matplotlib.figure.Figure: A figure showing the image with landmarks
