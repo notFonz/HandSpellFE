@@ -3,12 +3,25 @@ import requests
 import numpy as np
 import streamlit as st
 
-from utils import text_to_image_spellit, take_random_letter, take_random_word, plot_landmarks
-from utils import get_image_and_prediction, list_words #word_with_removed_letter, #removed_letter
+from utils import (
+    text_to_image_spellit,
+    take_random_letter,
+    take_random_word,
+    plot_landmarks,
+)
+from utils import (
+    get_image_and_prediction,
+    list_words,
+)  # word_with_removed_letter, #removed_letter
 from style import load_style
+
 load_style()
 
-st.set_page_config(page_title="HandSpell Spell It", page_icon=".images/le-wagon-logo.png", layout="wide")
+st.set_page_config(
+    page_title="HandSpell Spell It",
+    page_icon=".images/le-wagon-logo.png",
+    layout="wide",
+)
 
 st.logo(".images/le-wagon-logo.png", size="large")
 
@@ -19,18 +32,18 @@ st.markdown(
 )
 st.subheader("Complete the word with an image !")
 
-#st.set_page_config(page_title="HandSpell Spell It", layout="centered")
-#st.title("Spell It")
-#st.write("Complete the word with an image !")
+# st.set_page_config(page_title="HandSpell Spell It", layout="centered")
+# st.title("Spell It")
+# st.write("Complete the word with an image !")
 
 
-#random_word = take_random_word(list_words)
+# random_word = take_random_word(list_words)
 
-#word_with_removed_letter, removed_letter = take_random_letter(random_word)
+# word_with_removed_letter, removed_letter = take_random_letter(random_word)
 
-#st.session_state.random_word = take_random_word(list_words)
+# st.session_state.random_word = take_random_word(list_words)
 
-#st.session_state.word_with_removed_letter, st.session_state.removed_letter = take_random_letter(st.session_state.random_word)
+# st.session_state.word_with_removed_letter, st.session_state.removed_letter = take_random_letter(st.session_state.random_word)
 
 if "idx" not in st.session_state:
 
@@ -40,11 +53,14 @@ if "random_word" not in st.session_state:
 
     st.session_state.random_word = take_random_word(list_words)
 
-    (st.session_state.word_with_removed_letter, st.session_state.removed_letter) = take_random_letter(st.session_state.random_word)
+    st.session_state.word_with_removed_letter, st.session_state.removed_letter = (
+        take_random_letter(st.session_state.random_word)
+    )
 
-#container = text_to_image_spellit(st.session_state.word_with_removed_letter)
+# container = text_to_image_spellit(st.session_state.word_with_removed_letter)
 
 text_to_image_spellit(st.session_state.word_with_removed_letter)
+
 
 def compare_predict(true_missing_letter, uploaded_image):
     image, predicted_letter, prediction = get_image_and_prediction(uploaded_image)
@@ -59,10 +75,17 @@ def compare_predict(true_missing_letter, uploaded_image):
         if predicted_letter:
             prediction_confidence = prediction["confidence"]
             if prediction["letter"] == true_missing_letter:
-                st.success(f"That's right, word was missing a **{true_missing_letter}**, good fingerspelling !")
+                st.success(
+                    f"That's right, word was missing a **{true_missing_letter}**, good fingerspelling !"
+                )
             else:
-                st.error(f"You signed **{predicted_letter}**, it's not quite right. Try again !")
-            st.write(f"Model is {prediction_confidence*100:.0f}% confident you signed **{predicted_letter}**.")
+                st.error(
+                    f"You signed **{predicted_letter}**, it's not quite right. Try again !"
+                )
+            st.write(
+                f"Model is {prediction_confidence*100:.0f}% confident you signed **{predicted_letter}**."
+            )
+
 
 left, right = st.columns([1, 1], gap="large")
 with left:
@@ -70,9 +93,13 @@ with left:
     st.caption("Use good lighting and keep the whole hand and wrist visible.")
 
     source = st.radio("Input", ["Upload image", "Take a photo"], horizontal=True)
-    uploaded = (st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"],
-                key="single_upload") if source == "Upload image"
-            else st.camera_input("Take a hand sign photo"))
+    uploaded = (
+        st.file_uploader(
+            "Choose an image", type=["jpg", "jpeg", "png"], key="single_upload"
+        )
+        if source == "Upload image"
+        else st.camera_input("Take a hand sign photo")
+    )
     if uploaded is not None:
         st.session_state.readit_image_uploaded = uploaded
         st.image(uploaded)
@@ -81,12 +108,14 @@ with right:
     st.header("Translation results")
     compare_predict(st.session_state.removed_letter, uploaded)
 
-if st.button('Refresh'):
+if st.button("Refresh"):
 
-    st.session_state.idx = (st.session_state.idx+1)%len(list_words)
+    st.session_state.idx = (st.session_state.idx + 1) % len(list_words)
 
     st.session_state.random_word = take_random_word(list_words)
 
-    (st.session_state.word_with_removed_letter, st.session_state.removed_letter) = take_random_letter(st.session_state.random_word)
+    st.session_state.word_with_removed_letter, st.session_state.removed_letter = (
+        take_random_letter(st.session_state.random_word)
+    )
 
     st.rerun()

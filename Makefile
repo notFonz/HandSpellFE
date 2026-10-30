@@ -3,3 +3,6 @@ streamlit_cloud:
 
 streamlit_local:
 	streamlit run HandSpell.py --server.runOnSave true
+
+black:
+	uv run black .

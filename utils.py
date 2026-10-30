@@ -7,22 +7,36 @@ import matplotlib.pyplot as plt
 from PIL import Image, ImageOps, UnidentifiedImageError
 
 API_BASE_URL = st.secrets["API_URL"]
-API_SIGN_ENDPOINT = API_BASE_URL + 'sign/'
-API_PREDICT_ENDPOINT = API_BASE_URL + 'predict'
+API_SIGN_ENDPOINT = API_BASE_URL + "sign/"
+API_PREDICT_ENDPOINT = API_BASE_URL + "predict"
 
 CONFIDENCE_THRESHOLD = 0.3
 
-list_words = ['Hello', 'Love', 'Website', 'No', 'Yes']
+list_words = ["Hello", "Love", "Website", "No", "Yes"]
 
 HAND_CONNECTIONS = [
-    (0, 1), (1, 2), (2, 3), (3, 4),          # thumb
-    (0, 5), (5, 6), (6, 7), (7, 8),          # index
-    (9, 10), (10, 11), (11, 12),             # middle
-    (13, 14), (14, 15), (15, 16),            # ring
-    (0, 17), (17, 18), (18, 19), (19, 20),   # pinky
-    (5, 9), (9, 13), (13, 17),               # palm
+    (0, 1),
+    (1, 2),
+    (2, 3),
+    (3, 4),  # thumb
+    (0, 5),
+    (5, 6),
+    (6, 7),
+    (7, 8),  # index
+    (9, 10),
+    (10, 11),
+    (11, 12),  # middle
+    (13, 14),
+    (14, 15),
+    (15, 16),  # ring
+    (0, 17),
+    (17, 18),
+    (18, 19),
+    (19, 20),  # pinky
+    (5, 9),
+    (9, 13),
+    (13, 17),  # palm
 ]
-
 
 
 def process_image_for_show(upload):
@@ -42,18 +56,18 @@ def get_uploaded_image(uploaded_file):
 
 def take_random_word(list_of_words: list):
 
-    #random_word = np.random.choice(list_of_words, 1)
-    #st.session_state.idx = 0
+    # random_word = np.random.choice(list_of_words, 1)
+    # st.session_state.idx = 0
 
-    #random_word = list_of_words[st.session_state.idx]
+    # random_word = list_of_words[st.session_state.idx]
 
-    #st.write(random_word)
+    # st.write(random_word)
 
-    #return random_word
+    # return random_word
 
     idx = st.session_state.idx
 
-    return list_of_words[idx%len(list_of_words)]
+    return list_of_words[idx % len(list_of_words)]
 
 
 def take_random_letter(word):
@@ -66,7 +80,7 @@ def take_random_letter(word):
     random_word = []
     for index, letter in enumerate(list(word)):
         if index == r:
-            random_word.append('_')
+            random_word.append("_")
         else:
             random_word.append(letter)
 
@@ -80,19 +94,12 @@ def text_to_image_spellit(word: str):
     with container:
         for letter in word:
             letter = letter.upper()
-            if letter == '_':
-                st.image('.images/question mark.png',
-                         caption='?',
-                         width=64)
+            if letter == "_":
+                st.image(".images/question mark.png", caption="?", width=64)
 
             else:
-                response = requests.get(
-                    API_SIGN_ENDPOINT+letter,
-                    timeout=120
-                    )
-                st.image(response.content,
-                        caption=f"**{letter}**",
-                        width=64)
+                response = requests.get(API_SIGN_ENDPOINT + letter, timeout=120)
+                st.image(response.content, caption=f"**{letter}**", width=64)
 
     return container
 
@@ -119,7 +126,9 @@ def get_image_and_prediction(uploaded_file):
         if response.status_code == 200:
             prediction = response.json()
             if prediction["confidence"] is None:
-                st.warning("No hand/sign detected. Try a clear photo of the whole hand.")
+                st.warning(
+                    "No hand/sign detected. Try a clear photo of the whole hand."
+                )
             else:
                 predicted_letter = prediction["letter"]
         else:
@@ -144,7 +153,6 @@ def plot_landmarks(image: Image, landmarks: list) -> plt.figure:
     for a, b in HAND_CONNECTIONS:
         ax.plot([xs[a], xs[b]], [ys[a], ys[b]], color="white", linewidth=2)
     ax.scatter(xs, ys, s=20, c="cyan", zorder=3)
-
 
     ax.set_axis_off()
     return f

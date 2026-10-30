@@ -1,5 +1,6 @@
 import streamlit as st
 
+
 def load_style():
     st.html("""
     <style>
