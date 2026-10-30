@@ -1,3 +1,5 @@
+"""Read It page: translate a photo of a hand sign into a letter."""
+
 import streamlit as st
 
 
@@ -15,6 +17,16 @@ st.logo(".images/le-wagon-logo.png", size="large")
 
 
 def render_result(result, predicted_letter, threshold=CONFIDENCE_THRESHOLD):
+    """Show the predicted letter and model confidence.
+
+    The letter is only shown when the confidence is above ``threshold``;
+    otherwise a warning asks the user to try again.
+
+    Args:
+        result: The API prediction response, with a ``"confidence"`` key.
+        predicted_letter: The letter predicted by the model.
+        threshold: Minimum confidence needed to display the letter.
+    """
     letter = "?"
     if (result["confidence"] is not None) and result["confidence"] > threshold:
         letter = predicted_letter

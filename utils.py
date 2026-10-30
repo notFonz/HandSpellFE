@@ -1,3 +1,19 @@
+"""Shared helpers for the HandSpell Streamlit pages.
+
+Wraps calls to the HandSpell backend API (sign images and letter predictions),
+image loading, the Spell It word game logic, and plotting of detected hand
+landmarks.
+
+Attributes:
+    API_BASE_URL (str): Base URL of the HandSpell API, read from Streamlit secrets.
+    API_SIGN_ENDPOINT (str): Endpoint returning the sign image for a letter.
+    API_PREDICT_ENDPOINT (str): Endpoint predicting the letter signed in an image.
+    CONFIDENCE_THRESHOLD (float): Minimum model confidence to accept a prediction.
+    list_words (list[str]): Words used by the Spell It game.
+    HAND_CONNECTIONS (list[tuple[int, int]]): Pairs of hand landmark indices
+        joined by a line when drawing the hand skeleton.
+"""
+
 import requests
 import numpy as np
 import streamlit as st
@@ -39,10 +55,33 @@ HAND_CONNECTIONS = [
 
 
 def process_image_for_show(upload):
+    """Open an uploaded image and fix its orientation from EXIF data.
+
+    Args:
+        upload: A file path or file-like object containing the image.
+
+    Returns:
+        PIL.Image.Image: The image, rotated according to its EXIF orientation tag.
+
+    Raises:
+        PIL.UnidentifiedImageError: If the file is not a readable image.
+    """
     return ImageOps.exif_transpose(Image.open(upload))
 
 
 def get_uploaded_image(uploaded_file):
+    """Load an uploaded file as an image, stopping the page if it is invalid.
+
+    Shows a Streamlit error and stops the script run when the file cannot be
+    read as an image.
+
+    Args:
+        uploaded_file: The Streamlit ``UploadedFile`` from a file uploader or
+            camera input, or None if nothing was uploaded.
+
+    Returns:
+        PIL.Image.Image | None: The oriented image, or None if no file was given.
+    """
     processed_upload = None
     if uploaded_file is not None:
         try:
@@ -54,14 +93,32 @@ def get_uploaded_image(uploaded_file):
 
 
 def take_random_word(list_of_words: list):
+    """Pick the current word of the Spell It game.
 
+    The word is chosen from ``st.session_state.idx``, so it advances through the
+    list in order as the index changes rather than being truly random.
+
+    Args:
+        list_of_words: The words to choose from.
+
+    Returns:
+        str: The word at the session index, wrapping around the list length.
+    """
     idx = st.session_state.idx
 
     return list_of_words[idx % len(list_of_words)]
 
 
 def take_random_letter(word):
+    """Hide a random letter of a word behind an underscore.
 
+    Args:
+        word: The word to remove a letter from.
+
+    Returns:
+        tuple[str, str]: The word with one letter replaced by ``"_"``, and the
+        removed letter in upper case.
+    """
     r = np.random.choice(len(word))
 
     removed_letter = word[r]
@@ -78,7 +135,17 @@ def take_random_letter(word):
 
 
 def text_to_image_spellit(word: str):
+    """Render a word as a row of sign images, one per letter.
 
+    Each letter's sign image is fetched from the API; an underscore is shown as
+    a question mark image.
+
+    Args:
+        word: The word to render, possibly containing ``"_"`` for a hidden letter.
+
+    Returns:
+        streamlit.delta_generator.DeltaGenerator: The container holding the images.
+    """
     container = st.container(horizontal=True, wrap=True, border=True)
 
     with container:
@@ -95,7 +162,21 @@ def text_to_image_spellit(word: str):
 
 
 def get_image_and_prediction(uploaded_file):
+    """Load an uploaded image and ask the API which letter it signs.
 
+    Shows a Streamlit warning when no hand is detected and an error when the
+    API returns a non-200 status.
+
+    Args:
+        uploaded_file: The Streamlit ``UploadedFile`` to classify, or None.
+
+    Returns:
+        tuple: A 3-tuple ``(image, predicted_letter, prediction)`` where
+        ``image`` is the oriented ``PIL.Image.Image`` (None if no file),
+        ``predicted_letter`` is the predicted letter (None if no hand was
+        detected or the request failed), and ``prediction`` is the API's JSON
+        response as a dict (None if the request failed).
+    """
     processed_upload = get_uploaded_image(uploaded_file)
     predicted_letter = None
     prediction = None
@@ -126,7 +207,18 @@ def get_image_and_prediction(uploaded_file):
 
 
 def plot_landmarks(image: Image, landmarks: list) -> plt.figure:
+    """Draw the detected hand skeleton on top of an image.
 
+    Args:
+        image: The PIL image the landmarks were detected on.
+        landmarks: Hand landmarks, each a dict with ``"x"``, ``"y"`` and ``"z"``
+            coordinates. ``x`` and ``y`` are normalised to the [0, 1] range;
+            ``z`` (depth) is not used for plotting.
+
+    Returns:
+        matplotlib.figure.Figure: A figure showing the image with landmarks
+        and their connections drawn over it.
+    """
     img = np.array(image.convert("RGB"))
     h, w = img.shape[:2]
 

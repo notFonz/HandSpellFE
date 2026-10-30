@@ -1,3 +1,5 @@
+"""Learn It page: show the ASL sign for a letter the user types."""
+
 import requests
 import streamlit as st
 

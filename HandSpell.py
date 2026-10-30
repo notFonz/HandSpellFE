@@ -1,4 +1,8 @@
-"""Homepage of HandSpell Web App"""
+"""Home page of the HandSpell web app.
+
+Introduces HandSpell, an ASL fingerspelling translator, and the pages for
+translating, learning and playing.
+"""
 
 import streamlit as st
 
