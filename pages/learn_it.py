@@ -7,13 +7,8 @@ from style import load_style
 
 load_style()
 
-st.set_page_config(
-    page_title="HandSpell Learn It",
-    page_icon=".images/le-wagon-logo.png",
-    layout="wide",
-)
+st.set_page_config(page_title="HandSpell Learn It")
 
-st.logo(".images/le-wagon-logo.png", size="large")
 
 API_BASE_URL = st.secrets["API_URL"]
 

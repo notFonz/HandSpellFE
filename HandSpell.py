@@ -1,54 +1,22 @@
-"""Home page of the HandSpell web app.
-
-Introduces HandSpell, an ASL fingerspelling translator, and the pages for
-translating, learning and playing.
-"""
+"""Entrypoint of the HandSpell web app: shared setup and page menu."""
 
 import streamlit as st
 
 from style import load_style
 
+st.set_page_config(page_icon=".images/le-wagon-logo.png", layout="wide")
+
 load_style()
-st.html("""
-<style>
-h1 { font-size: 4rem !important; }
-</style>
-""")
 
 st.logo(".images/le-wagon-logo.png", size="large")
 
-st.set_page_config(page_title="HandSpell", page_icon=".images/le-wagon-logo.png", layout="wide")
+pages = [
+    st.Page("pages/home.py", title="HandSpell", default=True),
+    st.Page("pages/read_it.py", title="Read It", url_path="Read_It"),
+    st.Page("pages/learn_it.py", title="Learn It", url_path="Learn_It"),
+    st.Page("pages/name_it.py", title="Name It", url_path="Name_It"),
+    st.Page("pages/sign_it.py", title="Sign It", url_path="Sign_It"),
+    st.Page("pages/spell_it.py", title="Spell It", url_path="Spell_It"),
+]
 
-
-st.markdown(
-    """# Hand<span class='accent'>Spell</span>
-    """,
-    unsafe_allow_html=True,
-)
-
-st.markdown("""
-
-
-## Reading hands, one letter at a time
-
-
-
-HandSpell is an ASL (American Sign Language) translator. For now, it works with fingerspelling: the signed alphabet.
-
-**On HandSpell you can translate, learn or play!**
-
-Translation works both ways: from image to text, and from text to image.
-""")
-
-st.markdown(
-    "And there's the <span class='accent'>Spell it</span> game, to test what you've learned!",
-    unsafe_allow_html=True,
-)
-
-left, mid, right = st.columns([1, 10, 4])
-with mid:
-    st.image(
-        ".images/Asl-sign-language-coloring-at-coloring-pages-for-kids-boys-dotcom.svg",
-        caption="By Coloringbuddymike - Own work, CC BY-SA 3.0,"
-        + "https://commons.wikimedia.org/w/index.php?curid=24802810",
-    )
+st.navigation(pages).run()
