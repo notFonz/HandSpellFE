@@ -1,7 +1,7 @@
 # HandSpell - Reading hands, one letter at a time
 
 [HandSpell FrontEnd Streamlit Website](
-  https://handspell.streamlit.app/).
+  https://handspellfe.streamlit.app/).
 Provides:
 - Learn It, input a letter to get its sign language gesture
 - Name It, get an image and guess what sign gesture it represents
@@ -58,3 +58,18 @@ HandSpell provides the following core functionalities:
 
 [Backend Repo](
   https://github.com/notFonz/HandSpell)
+
+
+## License
+
+- **Code** (`HandSpell.py`, `pages/`, `src/`, `style.py`, `utils.py`, `.streamlit/config.toml`, `Makefile`): [GPL-3.0](LICENSE)
+- **Images and documentation** (`.images/`, `*.md`): [CC BY-SA 4.0](LICENSE-DATA), except the third-party files below.
+
+### Third-party assets
+
+These keep their original licenses:
+
+- `.images/ASL Letter Reference/`: from the [American Sign Language dataset](https://www.kaggle.com/datasets/kapillondhe/american-sign-language) by Kapil Londhe on Kaggle, [GPL-2.0](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
+- `.images/Asl-sign-language-coloring-at-coloring-pages-for-kids-boys-dotcom.svg`: "American Sign Language Chart Coloring Page Printable" by Coloringbuddymike, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Asl-sign-language-coloring-at-coloring-pages-for-kids-boys-dotcom.svg), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)
+- `.images/question mark.png`: question mark icon by [Friconix](https://friconix.com), free to use with a link to Friconix
+- `.images/le-wagon-logo.png`: © Le Wagon, used for identification only
